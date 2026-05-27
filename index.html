@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XT lite - 数字货币交易平台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div id="login-page" class="login-page">
+    <div class="login-bg">
+        <div class="login-bg-orb orb-1"></div>
+        <div class="login-bg-orb orb-2"></div>
+        <div class="login-bg-orb orb-3"></div>
+    </div>
+    <div class="login-container">
+        <div class="login-brand">
+            <span class="brand-xt">XT</span><span class="brand-lite">lite</span>
+        </div>
+        <h1 class="login-title">欢迎回来</h1>
+        <p class="login-desc">登录您的 XT lite 账户继续交易</p>
+        <form id="login-form" autocomplete="off">
+            <div class="form-group">
+                <label>邮箱 / 手机号</label>
+                <input type="text" id="login-email" placeholder="请输入邮箱或手机号" value="xiqimagic@yeah.net">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <div class="password-wrapper">
+                    <input type="password" id="login-password" placeholder="请输入密码" value="xiqi260525">
+                    <button type="button" class="toggle-pwd" id="toggle-pwd">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" checked> 记住我
+                </label>
+                <a href="javascript:void(0)" class="link-oops">忘记密码？</a>
+            </div>
+            <button type="submit" class="btn-login">登 录</button>
+        </form>
+        <div class="login-divider"><span>或</span></div>
+        <div class="login-social">
+            <button class="social-btn oops-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.129 22 16.99 22 12c0-5.523-4.477-10-10-10z"/></svg>
+            </button>
+            <button class="social-btn oops-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            </button>
+            <button class="social-btn oops-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </button>
+        </div>
+        <div class="login-footer">
+            还没有账户？<a href="javascript:void(0)" class="link-oops">立即注册</a>
+        </div>
+    </div>
+    <div class="login-container" id="login-2fa" style="display:none">
+        <div class="login-brand">
+            <span class="brand-xt">XT</span><span class="brand-lite">lite</span>
+        </div>
+        <h1 class="login-title">二步验证</h1>
+        <p class="login-desc">请输入谷歌验证器中的6位数字</p>
+        <form id="login-2fa-form" autocomplete="off">
+            <div class="form-group">
+                <label>谷歌验证码</label>
+                <div class="otp-inputs" id="otp-inputs">
+                    <input type="text" maxlength="1" class="otp-input" data-index="0" inputmode="numeric" autocomplete="one-time-code">
+                    <input type="text" maxlength="1" class="otp-input" data-index="1" inputmode="numeric">
+                    <input type="text" maxlength="1" class="otp-input" data-index="2" inputmode="numeric">
+                    <input type="text" maxlength="1" class="otp-input" data-index="3" inputmode="numeric">
+                    <input type="text" maxlength="1" class="otp-input" data-index="4" inputmode="numeric">
+                    <input type="text" maxlength="1" class="otp-input" data-index="5" inputmode="numeric">
+                </div>
+            </div>
+            <button type="submit" class="btn-login" id="btn-2fa-submit">验 证</button>
+        </form>
+        <div class="login-footer" style="margin-top:20px">
+            <a href="javascript:void(0)" class="link-oops">无法访问验证器？</a>
+        </div>
+    </div>
+</div>
+
+<div id="app" class="app" style="display:none">
+    <nav class="sidebar">
+        <div class="sidebar-brand">
+            <span class="brand-xt">XT</span><span class="brand-lite">lite</span>
+        </div>
+        <ul class="sidebar-nav">
+            <li class="nav-item active" data-page="market">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>行情</span>
+            </li>
+            <li class="nav-item" data-page="trade">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                <span>交易</span>
+            </li>
+            <li class="nav-item" data-page="buy">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                <span>买币</span>
+            </li>
+            <li class="nav-item" data-page="records">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span>交易记录</span>
+            </li>
+            <li class="nav-item" data-page="account">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>账户</span>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="sidebar-user" data-page="account">
+                <div class="user-avatar">x</div>
+                <div class="user-info">
+                    <span class="user-name">xiqimagic</span>
+                    <span class="user-id">ID: 886512</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <div class="search-box">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" placeholder="搜索币种..." id="search-input">
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-btn oops-btn" title="通知">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                    <span class="badge">3</span>
+                </button>
+                <button class="topbar-btn" id="btn-logout" title="退出登录">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <section id="page-market" class="page active">
+            <div class="page-header">
+                <h2>行情中心</h2>
+                <div class="market-tabs">
+                    <button class="tab-btn active" data-tab="favorites">自选</button>
+                    <button class="tab-btn" data-tab="usdt">USDT</button>
+                    <button class="tab-btn" data-tab="btc">BTC</button>
+                    <button class="tab-btn" data-tab="eth">ETH</button>
+                    <button class="tab-btn" data-tab="new">新币</button>
+                </div>
+            </div>
+            <div class="market-table-wrap">
+                <table class="market-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>币种/交易对</th>
+                            <th>最新价格</th>
+                            <th>24h涨跌</th>
+                            <th>24h最高</th>
+                            <th>24h最低</th>
+                            <th>24h成交量</th>
+                            <th>24h成交额</th>
+                        </tr>
+                    </thead>
+                    <tbody id="market-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="page-trade" class="page">
+            <div class="trade-layout">
+                <div class="trade-left">
+                    <div class="trade-pair-info">
+                        <div class="pair-select">
+                            <select id="trade-coin-select">
+                                <option value="BTC">BTC/USDT</option>
+                                <option value="ETH">ETH/USDT</option>
+                                <option value="SOL">SOL/USDT</option>
+                                <option value="BNB">BNB/USDT</option>
+                                <option value="XRP">XRP/USDT</option>
+                                <option value="DOGE">DOGE/USDT</option>
+                            </select>
+                        </div>
+                        <div class="pair-price" id="trade-current-price">67,542.30</div>
+                        <div class="pair-change up">+2.35%</div>
+                    </div>
+                    <div class="trade-chart-wrap">
+                        <div class="chart-toolbar">
+                            <button class="chart-period active" data-period="1m">1分</button>
+                            <button class="chart-period" data-period="5m">5分</button>
+                            <button class="chart-period" data-period="15m">15分</button>
+                            <button class="chart-period" data-period="1h">1时</button>
+                            <button class="chart-period" data-period="4h">4时</button>
+                            <button class="chart-period" data-period="1d">1天</button>
+                            <button class="chart-period" data-period="1w">1周</button>
+                        </div>
+                        <canvas id="trade-chart"></canvas>
+                    </div>
+                    <div class="trade-recent">
+                        <h3>最新成交</h3>
+                        <div class="recent-header">
+                            <span>时间</span><span>方向</span><span>价格(USDT)</span><span>数量(<span id="recent-coin">BTC</span>)</span>
+                        </div>
+                        <div class="recent-list" id="recent-trades"></div>
+                    </div>
+                </div>
+                <div class="trade-right">
+                    <div class="order-book">
+                        <h3>订单簿</h3>
+                        <div class="book-header">
+                            <span>价格(USDT)</span><span>数量(<span id="book-coin">BTC</span>)</span><span>累计</span>
+                        </div>
+                        <div class="book-asks" id="book-asks"></div>
+                        <div class="book-spread" id="book-spread">67,542.30</div>
+                        <div class="book-bids" id="book-bids"></div>
+                    </div>
+                    <div class="trade-form-wrap">
+                        <div class="trade-type-tabs">
+                            <button class="trade-type-btn active" data-type="limit">限价</button>
+                            <button class="trade-type-btn" data-type="market">市价</button>
+                        </div>
+                        <div class="trade-side-tabs">
+                            <button class="trade-side-btn buy active" data-side="buy">买入</button>
+                            <button class="trade-side-btn sell" data-side="sell">卖出</button>
+                        </div>
+                        <form id="trade-form" class="trade-form">
+                            <div class="form-group" id="price-group">
+                                <label>价格 (USDT)</label>
+                                <input type="text" id="trade-price" value="67,542.30">
+                            </div>
+                            <div class="form-group">
+                                <label>数量 (<span id="amount-coin">BTC</span>)</label>
+                                <input type="text" id="trade-amount" placeholder="0.00">
+                            </div>
+                            <div class="amount-slider">
+                                <button type="button" class="slider-btn" data-pct="25">25%</button>
+                                <button type="button" class="slider-btn" data-pct="50">50%</button>
+                                <button type="button" class="slider-btn" data-pct="75">75%</button>
+                                <button type="button" class="slider-btn" data-pct="100">100%</button>
+                            </div>
+                            <div class="trade-total">
+                                <span>交易额</span>
+                                <span id="trade-total-val">0.00 USDT</span>
+                            </div>
+                            <div class="trade-available">
+                                <span>可用</span>
+                                <span id="trade-available-val">50,000.00 USDT</span>
+                            </div>
+                            <button type="submit" class="btn-trade buy" id="btn-trade-submit">买入 BTC</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-buy" class="page">
+            <div class="page-header">
+                <h2>快捷买币</h2>
+            </div>
+            <div class="buy-layout">
+                <div class="buy-card">
+                    <div class="buy-tabs">
+                        <button class="buy-tab active" data-buy-type="buy">买入</button>
+                        <button class="buy-tab" data-buy-type="sell">卖出</button>
+                    </div>
+                    <div class="buy-form">
+                        <div class="form-group" id="buy-tier-group">
+                            <label>选择挡位 (CNY)</label>
+                            <div class="tier-options">
+                                <button class="tier-btn" data-tier="599">¥599</button>
+                                <button class="tier-btn active" data-tier="999">¥999</button>
+                                <button class="tier-btn" data-tier="1699">¥1,699</button>
+                            </div>
+                        </div>
+                        <div class="form-group" id="sell-amount-group" style="display:none">
+                            <label>卖出数量 (USDT) <span class="sell-balance">可用：82.60</span></label>
+                            <input type="number" id="sell-amount-input" placeholder="输入卖出数量" step="0.01" min="0" max="82.60">
+                        </div>
+                        <div class="buy-arrow">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                        </div>
+                        <div class="form-group">
+                            <label>我将获得</label>
+                            <div class="select-group">
+                                <input type="text" id="buy-receive" placeholder="0.00" readonly>
+                                <div class="select-suffix">
+                                    <span class="fixed-coin">USDT</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="buy-payment">
+                            <label>支付方式</label>
+                            <div class="payment-options">
+                                <button class="payment-opt active" data-pay="alipay">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                                    支付宝
+                                </button>
+                                <button class="payment-opt" data-pay="wechat">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                                    微信
+                                </button>
+                                <button class="payment-opt" data-pay="bank">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                                    银行卡
+                                </button>
+                            </div>
+                        </div>
+                        <div class="buy-rate">
+                            <span>参考价格</span>
+                            <span id="buy-rate-val">1 USDT ≈ 7.24 CNY</span>
+                        </div>
+                        <button class="btn-buy-submit" id="btn-buy-submit">买入 USDT</button>
+                    </div>
+                </div>
+                <div class="buy-merchants">
+                    <h3>推荐商家</h3>
+                    <div class="merchant-list" id="merchant-list"></div>
+                    <div class="merchant-pagination">
+                        <button class="page-btn" id="merchant-prev">上一页</button>
+                        <span class="page-info" id="merchant-page-info">第 1 页</span>
+                        <button class="page-btn" id="merchant-next">下一页</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-records" class="page">
+            <div class="page-header">
+                <h2>交易记录</h2>
+                <div class="records-filters">
+                    <button class="filter-btn active" data-filter="all">全部</button>
+                    <button class="filter-btn" data-filter="buy">买入</button>
+                    <button class="filter-btn" data-filter="sell">卖出</button>
+                    <button class="filter-btn" data-filter="deposit">充值</button>
+                    <button class="filter-btn" data-filter="withdraw">提现</button>
+                </div>
+            </div>
+            <div class="records-table-wrap">
+                <table class="records-table">
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>类型</th>
+                            <th>币种</th>
+                            <th>数量</th>
+                            <th>价格</th>
+                            <th>金额</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="records-tbody"></tbody>
+                </table>
+            </div>
+            <div class="records-pagination">
+                <button class="page-btn" id="prev-page">上一页</button>
+                <span class="page-info" id="page-info">第 1 页</span>
+                <button class="page-btn" id="next-page">下一页</button>
+            </div>
+        </section>
+
+        <section id="page-account" class="page">
+            <div class="account-layout">
+                <div class="account-profile">
+                    <div class="profile-card">
+                        <div class="profile-avatar">x</div>
+                        <div class="profile-info">
+                            <h3>xiqimagic</h3>
+                            <p>ID: 886512</p>
+                            <span class="verify-badge">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                已认证
+                            </span>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="profile-btn oops-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            编辑资料
+                        </button>
+                        <button class="profile-btn oops-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            安全设置
+                        </button>
+                        <button class="profile-btn oops-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                            设置
+                        </button>
+                    </div>
+                </div>
+                <div class="account-assets">
+                    <div class="assets-overview">
+                        <div class="assets-label">总资产估值</div>
+                        <div class="assets-total" id="assets-total">82.60 USDT</div>
+                        <div class="assets-change up">≈ ¥598.02</div>
+                    </div>
+                    <div class="assets-actions">
+                        <button class="asset-btn deposit" id="btn-deposit">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+                            充值
+                        </button>
+                        <button class="asset-btn withdraw" id="btn-withdraw">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                            提现
+                        </button>
+                        <button class="asset-btn transfer oops-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+                            划转
+                        </button>
+                    </div>
+                    <div class="assets-table-wrap">
+                        <table class="assets-table">
+                            <thead>
+                                <tr>
+                                    <th>币种</th>
+                                    <th>可用</th>
+                                    <th>冻结</th>
+                                    <th>估值</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assets-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div id="deposit-modal" class="modal" style="display:none">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>充值</h3>
+            <button class="modal-close" id="modal-close-deposit">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>选择币种</label>
+                <select id="deposit-coin">
+                    <option value="USDT">USDT</option>
+                    <option value="BTC">BTC</option>
+                    <option value="ETH">ETH</option>
+                </select>
+            </div>
+            <div class="deposit-qr">
+                <div class="qr-placeholder">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="1"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><rect x="18" y="14" width="3" height="3"/><rect x="14" y="18" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/></svg>
+                </div>
+                <p class="deposit-addr" id="deposit-addr">0x1a2B3c4D5e6F7890AbCdEf1234567890aBcDeF12</p>
+                <button class="btn-copy" id="btn-copy-addr">复制地址</button>
+            </div>
+            <div class="deposit-warn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <span>请仅向此地址充值对应币种，其他币种将无法到账</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="withdraw-modal" class="modal" style="display:none">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>提现</h3>
+            <button class="modal-close" id="modal-close-withdraw">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>选择币种</label>
+                <select id="withdraw-coin">
+                    <option value="USDT">USDT</option>
+                    <option value="BTC">BTC</option>
+                    <option value="ETH">ETH</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>提现地址</label>
+                <input type="text" id="withdraw-addr" placeholder="输入提现地址">
+            </div>
+            <div class="form-group">
+                <label>数量</label>
+                <input type="text" id="withdraw-amount" placeholder="输入提现数量">
+            </div>
+            <div class="withdraw-fee">
+                <span>手续费</span><span id="withdraw-fee-val">1.00 USDT</span>
+            </div>
+            <button class="btn-withdraw-submit oops-btn">确认提现</button>
+        </div>
+    </div>
+</div>
+
+<div id="buy-modal" class="modal" style="display:none">
+    <div class="modal-overlay"></div>
+    <div class="modal-content buy-modal-content">
+        <div class="modal-header">
+            <h3 id="buy-modal-title">选择商家</h3>
+            <button class="modal-close" id="modal-close-buy">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="buy-modal-select" class="buy-modal-select">
+                <div class="merchant-select-list" id="merchant-select-list"></div>
+            </div>
+            <div id="buy-modal-chat" class="buy-modal-chat" style="display:none">
+                <div class="chat-header" id="chat-header"></div>
+                <div class="chat-messages" id="chat-messages"></div>
+                <div class="chat-input-bar">
+                    <input type="text" id="chat-input" placeholder="输入消息...">
+                    <button class="chat-send-btn" disabled>发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
