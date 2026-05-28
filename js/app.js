@@ -41,6 +41,25 @@
         showToast('Oops!', 'oops');
     }
 
+    function showLoading(text) {
+        var el = document.getElementById('global-loading');
+        var txt = el.querySelector('.spinner-text');
+        txt.textContent = text || '加载中...';
+        el.style.display = 'flex';
+    }
+
+    function hideLoading() {
+        document.getElementById('global-loading').style.display = 'none';
+    }
+
+    function withLoading(text, callback, duration) {
+        showLoading(text);
+        setTimeout(function () {
+            callback();
+            hideLoading();
+        }, duration || 500);
+    }
+
     function initOopsButtons() {
         document.querySelectorAll('.oops-btn').forEach(function (btn) {
             if (btn._oopsBound) return;
@@ -82,13 +101,15 @@
             var btn = form.querySelector('.btn-login');
             btn.textContent = '登录中...';
             btn.disabled = true;
+            showLoading('验证账户...');
             setTimeout(function () {
+                hideLoading();
                 btn.textContent = '登 录';
                 btn.disabled = false;
                 document.querySelector('.login-container:not(#login-2fa)').style.display = 'none';
                 document.getElementById('login-2fa').style.display = 'block';
                 document.querySelectorAll('.otp-input')[0].focus();
-            }, 800);
+            }, 1000);
         });
 
         var otpInputs = document.querySelectorAll('.otp-input');
@@ -138,7 +159,9 @@
             var btn = document.getElementById('btn-2fa-submit');
             btn.textContent = '验证中...';
             btn.disabled = true;
+            showLoading('安全验证中...');
             setTimeout(function () {
+                hideLoading();
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('app').style.display = 'flex';
                 showToast('登录成功，欢迎回来！', 'success');
@@ -151,7 +174,7 @@
                 });
                 document.querySelector('.login-container:not(#login-2fa)').style.display = '';
                 document.getElementById('login-2fa').style.display = 'none';
-            }, 600);
+            }, 1000);
         });
     }
 
@@ -173,19 +196,28 @@
     }
 
     function switchPage(pageName) {
-        document.querySelectorAll('.nav-item').forEach(function (n) {
-            n.classList.toggle('active', n.getAttribute('data-page') === pageName);
-        });
-        document.querySelectorAll('.page').forEach(function (p) {
-            p.classList.remove('active');
-        });
-        var target = document.getElementById('page-' + pageName);
-        if (target) {
-            target.classList.add('active');
-        }
-        if (pageName === 'trade') {
-            setTimeout(drawChart, 100);
-        }
+        var pageLabels = {
+            market: '',
+            trade: '',
+            buy: '',
+            records: '',
+            account: ''
+        };
+        withLoading(pageLabels[pageName] || '加载中...', function () {
+            document.querySelectorAll('.nav-item').forEach(function (n) {
+                n.classList.toggle('active', n.getAttribute('data-page') === pageName);
+            });
+            document.querySelectorAll('.page').forEach(function (p) {
+                p.classList.remove('active');
+            });
+            var target = document.getElementById('page-' + pageName);
+            if (target) {
+                target.classList.add('active');
+            }
+            if (pageName === 'trade') {
+                setTimeout(drawChart, 100);
+            }
+        }, 500);
     }
 
     function initMarket() {
@@ -953,47 +985,51 @@
     }
 
     function switchToChat(merchant) {
-        document.getElementById('buy-modal-title').textContent = '订单聊天';
-        document.getElementById('buy-modal-select').style.display = 'none';
-        document.getElementById('buy-modal-chat').style.display = 'flex';
+        showLoading('连接商家...');
+        setTimeout(function () {
+            hideLoading();
+            document.getElementById('buy-modal-title').textContent = '订单聊天';
+            document.getElementById('buy-modal-select').style.display = 'none';
+            document.getElementById('buy-modal-chat').style.display = 'flex';
 
-        var type = document.querySelector('.buy-tab.active').getAttribute('data-buy-type');
-        var typeLabel = type === 'buy' ? '买入' : '卖出';
-        var cnyRate = 7.24;
-        var amountUSDT, amountCNY;
-        if (type === 'buy') {
-            amountUSDT = (currentTier / cnyRate).toFixed(2);
-            amountCNY = '¥' + currentTier.toLocaleString() + ' CNY';
-        } else {
-            var sellVal = parseFloat(document.getElementById('sell-amount-input').value) || 0;
-            amountUSDT = sellVal.toFixed(2);
-            amountCNY = '¥' + (sellVal * cnyRate).toFixed(2) + ' CNY';
-        }
+            var type = document.querySelector('.buy-tab.active').getAttribute('data-buy-type');
+            var typeLabel = type === 'buy' ? '买入' : '卖出';
+            var cnyRate = 7.24;
+            var amountUSDT, amountCNY;
+            if (type === 'buy') {
+                amountUSDT = (currentTier / cnyRate).toFixed(2);
+                amountCNY = '¥' + currentTier.toLocaleString() + ' CNY';
+            } else {
+                var sellVal = parseFloat(document.getElementById('sell-amount-input').value) || 0;
+                amountUSDT = sellVal.toFixed(2);
+                amountCNY = '¥' + (sellVal * cnyRate).toFixed(2) + ' CNY';
+            }
 
-        document.getElementById('chat-header').innerHTML =
-            '<div class="chat-header-avatar">' + merchant.name.charAt(0) + '</div>' +
-            '<div><div class="chat-header-name">' + merchant.name + '</div>' +
-            '<div class="chat-header-status">在线</div></div>';
+            document.getElementById('chat-header').innerHTML =
+                '<div class="chat-header-avatar">' + merchant.name.charAt(0) + '</div>' +
+                '<div><div class="chat-header-name">' + merchant.name + '</div>' +
+                '<div class="chat-header-status">在线</div></div>';
 
-        var messages = document.getElementById('chat-messages');
-        var paymentOpt = document.querySelector('.payment-opt.active');
-        var paymentLabel = paymentOpt ? paymentOpt.textContent.trim() : '支付宝';
-        messages.innerHTML =
-            '<div class="chat-order-card">' +
-            '<div class="chat-order-card-header">订单信息</div>' +
-            '<div class="chat-order-card-body">' +
-            '<div class="chat-order-row"><span>类型</span><span>' + typeLabel + ' USDT</span></div>' +
-            '<div class="chat-order-row"><span>金额</span><span>' + (type === 'buy' ? amountCNY : amountUSDT + ' USDT') + '</span></div>' +
-            '<div class="chat-order-row"><span>获得</span><span>' + (type === 'buy' ? amountUSDT + ' USDT' : amountCNY) + '</span></div>' +
-            '<div class="chat-order-row"><span>单价</span><span>¥' + merchant.price + '/USDT</span></div>' +
-            '<div class="chat-order-row"><span>支付</span><span>' + paymentLabel + '</span></div>' +
-            '</div></div>' +
-            '<div class="chat-waiting">' +
-            '<div class="chat-waiting-dots"><span></span><span></span><span></span></div>' +
-            '等待商家回复...' +
-            '</div>';
+            var messages = document.getElementById('chat-messages');
+            var paymentOpt = document.querySelector('.payment-opt.active');
+            var paymentLabel = paymentOpt ? paymentOpt.textContent.trim() : '支付宝';
+            messages.innerHTML =
+                '<div class="chat-order-card">' +
+                '<div class="chat-order-card-header">订单信息</div>' +
+                '<div class="chat-order-card-body">' +
+                '<div class="chat-order-row"><span>类型</span><span>' + typeLabel + ' USDT</span></div>' +
+                '<div class="chat-order-row"><span>金额</span><span>' + (type === 'buy' ? amountCNY : amountUSDT + ' USDT') + '</span></div>' +
+                '<div class="chat-order-row"><span>获得</span><span>' + (type === 'buy' ? amountUSDT + ' USDT' : amountCNY) + '</span></div>' +
+                '<div class="chat-order-row"><span>单价</span><span>¥' + merchant.price + '/USDT</span></div>' +
+                '<div class="chat-order-row"><span>支付</span><span>' + paymentLabel + '</span></div>' +
+                '</div></div>' +
+                '<div class="chat-waiting">' +
+                '<div class="chat-waiting-dots"><span></span><span></span><span></span></div>' +
+                '等待商家回复...' +
+                '</div>';
 
-        messages.scrollTop = messages.scrollHeight;
+            messages.scrollTop = messages.scrollHeight;
+        }, 2000);
     }
 
     function initApp() {

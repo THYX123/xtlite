@@ -88,6 +88,44 @@ a {
     border-color: var(--green);
 }
 
+.global-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(11, 14, 17, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: loadingIn 0.2s ease;
+}
+@keyframes loadingIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+.spinner-ring {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--bg-tertiary);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spinRing 0.8s linear infinite;
+}
+@keyframes spinRing {
+    to { transform: rotate(360deg); }
+}
+.spinner-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+}
+
 .login-page {
     position: fixed;
     inset: 0;
